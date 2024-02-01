@@ -39,11 +39,11 @@ class RSI():
                 self.signals[index] = 'HOLD'
         for key in self.signals:
             print(key, self.signals[key])
-
-    def plot_signals(self, combined):
+        return combined
+    def plot_signals(self, data):
         plt.figure(figsize=(12, 8))
         plt.subplot(211)
-        plt.plot(combined.index, combined["Adj Close"], color="lightgray")
+        plt.plot(data.index, data["Adj Close"], color="lightgray")
         plt.title("Adjusted Close Price")
         plt.grid(True, color="#555555")
         plt.gca().set_axisbelow(True)
@@ -53,7 +53,7 @@ class RSI():
         plt.gca().tick_params(axis="y", colors="white")
 
         plt.subplot(212)
-        plt.plot(combined.index, combined["rsi"], color="lightgray")
+        plt.plot(data.index, data["rsi"], color="lightgray")
         plt.axhline(0, linestyle="--", alpha=0.5, color="#ff0000")
         plt.axhline(10, linestyle="--", alpha=0.5, color="#ffaa00")
         plt.axhline(20, linestyle="--", alpha=0.5, color="#00ff00")
