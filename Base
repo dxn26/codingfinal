@@ -83,3 +83,4 @@ class RSI():
 test = RSI("AAPL", (2022, 1, 1), (2024, 1, 31), 70, 30)
 test.calculate_signals(14)
 print(test.get_signals((2023, 11, 22)))
+test.plot_signals(test.calculate_signals(14))
