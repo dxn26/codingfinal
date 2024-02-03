@@ -102,7 +102,7 @@ of the stock ticker desired to be analysed and output of a number between
         else:
             return f"No signal available for {when_date}. Market closed that day."
 
-    def backtest(self, capital, data):
+    def backtest(self, capital, data,start):
         locale.setlocale(locale.LC_ALL, '')
         stocks = 0
         money_left = capital
@@ -132,11 +132,11 @@ of the stock ticker desired to be analysed and output of a number between
             else:
                 continue
         print(
-            f"{locale.currency(money_left + (stocks * price), grouping=True)} - you made a profit/loss of {locale.currency(money_left + (stocks * price) - capital, grouping=True)} since {self.start}")
+            f"{locale.currency(money_left + (stocks * price), grouping=True)} - you made a profit/loss of {locale.currency(money_left + (stocks * price) - capital, grouping=True)} since {start}")
         return transactions
 
 
 # Example usage
 test = strategy("AMZN")
-test.plot_signals(test.rsi((2023, 1, 4), (2024, 1, 31), 80, 20, 14), test.backtest(1000000, test.rsi((2023, 1, 4), (2024, 1, 31), 80, 20, 14)))
+test.plot_signals(test.rsi((2023, 1, 4), (2024, 1, 31), 80, 20, 14), test.backtest(1000000, test.rsi((2023, 1, 4), (2024, 1, 31), 80, 20, 14),(2023, 1, 4))
 
