@@ -124,5 +124,5 @@ class RSI():
                 continue
         print(f"{locale.currency(money_left+(stocks*price),grouping=True)} - you made a profit/loss of {locale.currency(money_left+(stocks*price)-capital, grouping=True)} since {self.start}")
         return transactions
-test = RSI("AMZN", (2023, 1, 4), (2024, 1, 31), 60, 40)
+test = RSI("AMZN", (2023, 1, 4), (2024, 1, 31), 80, 20)
 test.plot_signals(test.calculate_signals(14), test.backtest(1000000, test.calculate_signals(14)))
