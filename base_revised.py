@@ -59,7 +59,7 @@ of the stock ticker desired to be analysed and output of a number between
             prev_rsi = row['rsi']
         return combined
 
-    def plot_signals(self,data, transactions, *args):
+    def plot_signals(self,data, transactions):
         plt.figure(figsize=(12, 8))
         plt.subplot(211)
         plt.plot(data.index, data["Adj Close"], color="lightgray")
