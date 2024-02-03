@@ -70,7 +70,11 @@ of the stock ticker desired to be analysed and output of a number between
         plt.gcf().set_facecolor("#121212")
         plt.gca().tick_params(axis="x", colors="white")
         plt.gca().tick_params(axis="y", colors="white")
-
+        for index in transactions:
+            if transactions[index] == "SELL":
+                plt.scatter(index, data.loc[index, "Open"], color = "red")
+            elif transactions[index] == "BUY":
+                plt.scatter(index, data.loc[index, "Open"], color = "green")
         plt.subplot(212)
         plt.plot(data.index, data["rsi"], color="lightgray")
         plt.axhline(0, linestyle="--", alpha=0.5, color="#ff0000")
