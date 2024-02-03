@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import pandas as pd
 import yfinance as yf
+import locale
 class strategy():
     '''The strategy class contains many stock stragies which have an input
 of the stock ticker desired to be analysed and output of a number between
