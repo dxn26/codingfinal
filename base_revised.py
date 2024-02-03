@@ -30,21 +30,29 @@ of the stock ticker desired to be analysed and output of a number between
         relative_strength = average_gain / average_loss #Create pandas series for relatie strenght for specific times
         rsi = 100.0 - (100.0 / (1.0 + relative_strength)) #Convert relative strenght into rsi
         combined = pd.DataFrame() #Initialise final df
+        
+        combined["Open"] = data["Open"]
+        combined["High"] = data["High"]
+        combined["Low"] = data["Low"]
+
         combined["Adj Close"] = data["Adj Close"] #Add column of closing prices
         combined["rsi"] = rsi #Add column for rsi value
 
-        #Give signal
         # Determine signals
-        for index, row in combined.iterrows():
-            if row["rsi"] > hi:
-                self.signals[index] = 'SELL'
-            elif row["rsi"] < lo:
-                self.signals[index] = 'BUY'
-            else:
-                self.signals[index] = 'HOLD'
-        for key in self.signals:
-            print("At {}, you should {}".format(key,self.signals[key]))
+        prev_rsi = combined.loc[datetime(*start).strftime("%Y-%m-%d %H:%M:%S"), 'rsi']
+        for index, row in combined.iloc[1:].iterrows():
+            try:
+                if row["rsi"] < hi and prev_rsi > hi:
+                    self.signals[combined.index[combined.index.get_loc(index) + 1]] = 'SELL'
+                elif row["rsi"] > lo and prev_rsi < lo:
+                    self.signals[combined.index[combined.index.get_loc(index) + 1]] = 'BUY'
+                else:
+                    self.signals[combined.index[combined.index.get_loc(index) + 1]] = 'HOLD'
+            except IndexError:
+                print("---")
+            prev_rsi = row['rsi']
         return combined
+
 
     def plot_signals(data):
         plt.figure(figsize=(12, 8))
@@ -74,6 +82,11 @@ of the stock ticker desired to be analysed and output of a number between
         plt.gca().set_facecolor("black")
         plt.gca().tick_params(axis="x", colors="white")
         plt.gca().tick_params(axis="y", colors="white")
+        for index in transactions:
+            if transactions[index] == "SELL":
+                plt.scatter(index, data.loc[index, "rsi"], color = "red")
+            elif transactions[index] == "BUY":
+                plt.scatter(index, data.loc[index, "rsi"], color = "green")
 
         plt.show()
 
@@ -84,6 +97,33 @@ of the stock ticker desired to be analysed and output of a number between
         else:
             return f"No signal available for {when_date}. Market closed that day."
 
+    def backtest(self, capital,data):
+        locale.setlocale(locale.LC_ALL, '')
+        stocks = 0
+        money_left = capital
+        transactions = {}
+        for index in self.signals:
+            new = 0
+            price = data.loc[index, "Open"]
+            if self.signals[index] == "BUY":
+                if money_left >= price:
+                    transactions[index] = "BUY"
+                    new = (money_left // price)
+                    stocks += new
+                    money_left -= money_left//price*price
+                    print(f"bought on {index} {round(new)} stock(s), for {locale.currency(price, grouping=True)}. I now have {round(stocks)} stocks and {locale.currency(money_left, grouping=True)} left")
+                else:
+                    continue
+            elif self.signals[index] == "SELL":
+                if stocks != 0:
+                    transactions[index] = "SELL"
+                    money_left += stocks * price
+                    print(f"sold on {index} {round(stocks)} stocks, for {locale.currency(price, grouping=True)}. I now have {round(new)} stocks and {locale.currency(money_left, grouping=True)} left")
+                    stocks = 0
+                else:
+                    continue
+            else:
+                continue
 
 # Example usage
 test = strategy('AAPL')
