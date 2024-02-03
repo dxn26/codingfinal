@@ -137,7 +137,6 @@ of the stock ticker desired to be analysed and output of a number between
 
 
 # Example usage
-test = strategy('AAPL')
-test.rsi((2022, 1, 1), (2024, 1, 31), 70, 30, 14)
-print(test.get_signals((2023, 11, 22)))
-test.plot_signals(test.rsi((2022, 1, 1), (2024, 1, 31), 70, 30, 14))
+test = strategy("AMZN")
+test.plot_signals(test.rsi((2023, 1, 4), (2024, 1, 31), 80, 20, 14), test.backtest(1000000, test.rsi((2023, 1, 4), (2024, 1, 31), 80, 20, 14)))
+
