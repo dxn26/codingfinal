@@ -125,7 +125,7 @@ of the stock ticker desired to be analysed and output of a number between
                     continue
             else:
                 continue
-test = strategy("AMZN", (2023, 1, 4), (2024, 1, 31), 80, 20)
+test = strategy("AMZN")
 test.plot_signals(test.calculate_signals((2023, 1, 4), (2024, 1, 31), 80, 20, 14), test.backtest(1000000, test.calculate_signals((2023, 1, 4), (2024, 1, 31), 80, 20, 14)))
 
 
